@@ -2,6 +2,8 @@ source shared.sh
 
 run_params="-a -s -t 16"
 
+mkdir logs
+
 echo "Generating ICs"
 
 mkdir ics
@@ -45,3 +47,4 @@ do
 		echo "../../../swiftsim-master/build/${scheme}/examples/swift ${run_params} ../../../ics/sedov_${n_part}.yml" > $scheme/$n_part/run.sh
 	done
 done
+
