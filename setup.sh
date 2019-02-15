@@ -1,5 +1,7 @@
 source shared.sh
 
+run_params="-a -s -t 16"
+
 echo "Generating ICs"
 
 mkdir ics
@@ -16,7 +18,30 @@ do
 	mv sedov.hdf5 sedov_$n_part.hdf5
 
 	cp sedov.yml sedov_$n_part.yml
-	sed -i '' "s/\.\/sedov/\.\.\/\.\.\/ics\/sedov_${n_part}/" sedov_$n_part.yml
+	sed -i '' "s/\.\/sedov/\.\.\/\.\.\/\.\.\/ics\/sedov_${n_part}/" sedov_$n_part.yml
 done
 
+cd ..
 
+mkdir output
+cd output
+
+for scheme in "${sph[@]}"
+do
+	mkdir $scheme
+	for n_part in "${n_particles[@]}"
+	do
+		mkdir $scheme/$n_part
+		echo "../../../swiftsim-master/build/${scheme}/examples/swift ${run_params} ../../../ics/sedov_${n_part}.yml" > $scheme/$n_part/run.sh
+	done
+done
+
+for scheme in "${gizmo[@]}"
+do
+	mkdir $scheme
+	for n_part in "${n_particles[@]}"
+	do
+		mkdir $scheme/$n_part
+		echo "../../../swiftsim-master/build/${scheme}/examples/swift ${run_params} ../../../ics/sedov_${n_part}.yml" > $scheme/$n_part/run.sh
+	done
+done
